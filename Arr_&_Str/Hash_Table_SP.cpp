@@ -125,9 +125,9 @@ class HashTable {
     public:
     bool isEmpty() const;
     int hashFunction(int key);
-    bool itExists(int key);
-    void insetItem(int key, string name);
+    void insertItem(int key, string name);
     void removeItem(int key);
+    list< string > searchTable(int key);
     void printTable();
 };
 
@@ -142,17 +142,99 @@ bool HashTable::isEmpty() const{
     return false;
 }
 
-bool itExists(int key) {
-    int hashValue = hashFunction(key);
+int HashTable::hashFunction(int key) {
+    return (key % hashGroups);
+}
 
+void HashTable::insertItem(int key, string name) {
+    int hashValue = hashFunction(key);
+    auto& cell = hashTable[hashValue];
+    auto bItr = begin(cell);
+    bool itExists = false;
+    for (; bItr != end(cell); bItr++) {
+        if (bItr->first == key) {
+            itExists = true;
+            cout << "[WARINING] Key already exists. Value has been replaced" << "\n";
+            bItr->second = name;
+            return;
+        }
+    }
+    cout << "Value Successfully Inserted. Good Job!" << "\n";
+    cell.emplace_back(key, name);
+}
+
+void HashTable::removeItem(int key) {
+    int hashValue = hashFunction(key);
+    auto& cell = hashTable[hashValue];
+    auto bItr = begin(cell);
+    bool itExists = false;
+    for (; bItr != end(cell); bItr++) {
+        if (bItr->first == key) {
+            cout << "Key exists. Value has been removed" << "\n";
+            bItr = cell.erase(bItr);
+            itExists = true;
+        }
+    }
+    if (!itExists) {
+        cout << "Value does not exists" << "\n";
+    }
+}
+
+void HashTable::printTable() {
+    for (int i = 0; i < hashGroups; i++) {
+        if (hashTable[i].size() == 0) continue;
+
+        auto bItr = begin(hashTable[i]);
+        for (; bItr != end(hashTable[i]); bItr++) {
+            cout << "Key: " << bItr->first << " Value: " <<
+            bItr->second;
+        }
+    }
+    
+}
+
+list <string> HashTable::searchTable(int key) {
+    list <string> searchTableResults;
+    if (hashTable[key].size() == 0) {
+        cout << "Sorry, no value exists in this key." << "\n";
+        return searchTableResults;
+    }
+    auto bItr = begin(hashTable[key]);
+    for (; bItr != end(hashTable[key]); bItr++) {
+        cout << "[Search Table Results]Key: " << bItr->first << " Value: " <<
+            bItr->second;
+            searchTableResults.emplace_back(bItr->second);
+    }
+    return searchTableResults;
 }
 
 int main() {
-    HashTable HT;
+        HashTable HT;
+
     if (HT.isEmpty()) {
-        cout << "HT is empty." << "\n";
+        cout << "Correct answer." << "\n";
     }
     else {
-        cout  << "HT is not empty." << "\n";
+        cout << "There's an issue" << "\n";
+    }
+    HT.insertItem(905,"Jim");
+    HT.insertItem(932,"Jon");
+    HT.insertItem(907,"Jam");
+    HT.insertItem(951,"Tom");
+    HT.insertItem(902,"Kun");
+    HT.insertItem(802,"Kan");
+    HT.insertItem(802,"Rick");
+    HT.insertItem(202,"Rob");
+    HT.insertItem(113,"Kancer");
+    HT.searchTable(932);
+
+    HT.printTable();
+    HT.removeItem(113);
+    HT.removeItem(112);
+    if (HT.isEmpty()) {
+        cout << "Oh no, we need to check out our code" << "\n";
+    }
+    else {
+        cout << "Correct Answer! Good Job" << "\n";
     }
 }
