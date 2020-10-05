@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <list>
 
 using namespace std;
 
@@ -14,6 +15,17 @@ using namespace std;
 //     }
 //     return true;
 // }
+
+bool removeDupes(list<int> myList) {
+    set <int> mySet;
+    list<int>::iterator Itr;
+    for (Itr = myList.begin(); Itr != myList.end(); Itr++) {
+        auto myVal = mySet.insert(Itr);
+        if (myVal.second == false) {
+            myList.erase(Itr);
+        }
+    }
+}
 
 int main(int argc, char ** argv) {
     // Question 1:
