@@ -20,7 +20,7 @@ bool removeDupes(list<int> myList) {
     set <int> mySet;
     list<int>::iterator Itr;
     for (Itr = myList.begin(); Itr != myList.end(); Itr++) {
-        auto myVal = mySet.insert(Itr);
+        auto myVal = mySet.insert(*Itr);
         if (myVal.second == false) {
             myList.erase(Itr);
         }
