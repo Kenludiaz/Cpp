@@ -5,7 +5,7 @@ using namespace std;
 
 string Capitalize_first_letter(string text) {
 
-	for (int x = 0; x < text.length(); x++)
+	for (size_t x = 0; x < text.length(); x++)
 	{
 		if (x == 0)
 		{
